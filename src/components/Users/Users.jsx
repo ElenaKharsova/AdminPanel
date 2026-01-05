@@ -9,6 +9,8 @@ export default function Users(){
   const [filter, setFilter] = useState("");
   const {token} = useAuth();
 
+  const [direction, setDirection] = useState("up");  
+
   useEffect(()=>{
     if(!token) return;
 
@@ -19,9 +21,23 @@ export default function Users(){
 
   const filteredUsers = useMemo(()=>{
     const filterCheck = filter.trim().toLowerCase();
-    if(!filterCheck) return users;
-    return users.filter(user=> user.username.toLowerCase().includes(filterCheck));
-  }, [users, filter]);
+    let resultUsers = users;
+
+    if(filterCheck){
+      resultUsers = users.filter(user=> user.username.toLowerCase().includes(filterCheck));
+    }
+
+    resultUsers = [...resultUsers].sort((a,b)=>{ 
+      return direction === "up" ? a.id-b.id : b.id - a.id
+    });
+
+    return resultUsers;
+  }, [users, filter, direction]);
+
+  function changeSorting(){
+    console.log("Direction changed");
+    setDirection(prev=>prev==="up" ? "down" : "up");
+  }
 
   return(
     <div className="wrap">
@@ -35,7 +51,7 @@ export default function Users(){
             onChange={(event)=>setFilter(event.target.value)}
           />
         </div>
-        <Table users={filteredUsers} />
+        <Table users={filteredUsers} direction={direction} changeSorting={changeSorting}/>
       </div>
     </div>
   );
