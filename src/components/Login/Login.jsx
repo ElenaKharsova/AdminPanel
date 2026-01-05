@@ -1,57 +1,59 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import styles from './login.module.css';
+import {loginUser} from '../../api'
+import { saveToken,removeToken } from '../../storage';
 
 export default function Login(){
   
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
 
-  function login(formData){
+  async function login(e){
+    e.preventDefault();
     setError(null);
 
-    const username = formData.get("login");
-    const password = formData.get("password");
+    const formData = new FormData(e.target);
+    const credentials = {
+      username: formData.get("login"),
+      password: formData.get("password")
+    };
 
-    fetch("https://test-assignment.emphasoft.com/api/v1/login/", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({username: username, password: password}),
-      })
-    .then(res=>{
-      if(!res.ok){
-        throw new Error('Http error, status = ' + res.status);
-      }
-      return res.json();
-    })
-    .then(data=>{
-      setToken(data.token);    
-    })
-    .catch(error=>{
+    try {
+      const data = await loginUser(credentials);
+      console.log("Login successful", data.token);
+      setToken(data.token);
+    }
+    catch(error) {
+      console.error("loginUser error:", error);
       setToken(null);
-      setError(error instanceof Error ? error.message : "Unknown error");
-    })
+      setError("Login failed. Please check your credentials and try again.");
+    }    
   }
 
+  useEffect(()=>{
+    console.log("Login token:", token);
+    token ? saveToken(token) : removeToken(); 
+  }, [token]);
+
   return(
-    <form className={styles['login-form']} action={login}>
-      <label>Login
-        <input                  
-          type='text' 
-          aria-label='login'
-          name='login'
-          className='login-form__input'/>
-      </label>
-      <label>Password
-        <input 
-          type='password' 
-          aria-label='password'
-          name='password'
-          className='login-form__input' />
-      </label>
-      <button className='login-form_btn'>Login</button>
-      {error && <p className='alert'>{error}</p>}
-    </form>
+    <div className={styles["login-wrap"]}>
+      <h1>Sign in to your account</h1>
+      <form onSubmit={login} className={styles['login-form']} >
+          <input                  
+            type='text' 
+            aria-label='login'
+            name='login'
+            className={styles['login-form__input']}
+            placeholder='Email address'/>
+          <input 
+            type='password' 
+            aria-label='password'
+            name='password'
+            className={styles['login-form__input']} 
+            placeholder='Password'/>
+        <button className={styles['login-form_btn']}>Sign in</button>
+        {error && <p className='alert'>{error}</p>}
+      </form>
+    </div>
   );
 }

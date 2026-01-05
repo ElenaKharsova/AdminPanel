@@ -1,3 +1,14 @@
-.wrap {
-  margin: 0 auto;
+:root {
+  --main-color: #FFF7ED;
+  --second-color: #FFFFFF;
+  --additional-color: #FF8C38;
+  --font-color: #161616;
+  --font-color-light: #4D4D4D;
 }
+
+body {
+  background-color: var(--main-color);
+}
+
+
+
