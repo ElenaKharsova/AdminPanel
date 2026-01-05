@@ -1,14 +1,15 @@
-import { use, useEffect, useState } from 'react';
+import { useState } from 'react';
 import styles from './login.module.css';
 import {loginUser} from '../../api'
-import { saveToken,removeToken } from '../../storage';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/useAuth';
 
 export default function Login(){
-  
-  const [token, setToken] = useState(null);
+  const navigate = useNavigate();
+  const { setLoginData } = useAuth();  
   const [error, setError] = useState(null);
 
-  async function login(e){
+  function login(e){
     e.preventDefault();
     setError(null);
 
@@ -18,22 +19,17 @@ export default function Login(){
       password: formData.get("password")
     };
 
-    try {
-      const data = await loginUser(credentials);
-      console.log("Login successful", data.token);
-      setToken(data.token);
-    }
-    catch(error) {
-      console.error("loginUser error:", error);
-      setToken(null);
-      setError("Login failed. Please check your credentials and try again.");
-    }    
-  }
-
-  useEffect(()=>{
-    console.log("Login token:", token);
-    token ? saveToken(token) : removeToken(); 
-  }, [token]);
+    loginUser(credentials)
+      .then((data) => {
+        console.log("Login successful", data.token);
+        setLoginData(data.token);
+        navigate('/users', {replace: true});
+      })
+      .catch((error) => {
+        console.error("loginUser error:", error);
+        setError("Login failed. Please check your credentials and try again.");
+      })
+  }    
 
   return(
     <div className={styles["login-wrap"]}>
