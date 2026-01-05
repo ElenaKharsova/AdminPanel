@@ -1,13 +1,19 @@
-import { useEffect, useState, createContext } from "react";
+import { useState, createContext, useMemo } from "react";
 import { clearToken, getToken, saveToken } from "../storage";
 
 export const AuthContext =  createContext(null);
 
 export default function AuthProvider({children}){
-  const [auth, setAuth] = useState({
-    isAuthenticated: false,
-    token: null
-});
+  const token = getToken()  
+  const authData = token ? 
+    { isAuthenticated: true,
+      token: token
+    } :
+    { isAuthenticated: false,
+      token: null
+    };
+    
+  const [auth, setAuth] = useState(authData);
 
   const setLoginData = (token) => {
     if(token){
@@ -25,18 +31,10 @@ export default function AuthProvider({children}){
     }
   }
 
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setAuth({
-        isAuthenticated: true,
-        token: token
-      })
-    } 
-  }, [])
+  const value = useMemo(()=>({...auth, setLoginData}),[auth, setLoginData]);
 
   return (
-    <AuthContext.Provider value={{...auth, setLoginData}}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

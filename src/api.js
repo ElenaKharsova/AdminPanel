@@ -1,5 +1,22 @@
-export async function getUsers(){
-  const response = await fetch('');
+export async function getUsers(token){
+  const authHead = `Token ${token}`;
+
+  const response = await fetch('https://test-assignment.emphasoft.com/api/v1/users/',{
+    method: 'GET',
+    headers: {
+      "Authorization": authHead,
+    }
+  })
+
+  const data = await response.json();
+
+  if(!response.ok){
+    throw new Error('Http error, status = ' + response.status);
+  }
+
+  console.log("getUsers:", data);
+
+  return data;
 }
 
 export async function loginUser({username, password}){
