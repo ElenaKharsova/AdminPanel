@@ -1,0 +1,43 @@
+:root {
+  --table-main-color: #FFF5ED;
+  --table-second-color: #FFEFE2;
+  --table-additional-color: #F3AB55;  
+  --table-text-color: #7E6148;
+}
+
+.table {
+  border-collapse: collapse;
+  border: 1px solid #F1E1D2;
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--table-text-color);
+}
+
+.header__cell, 
+.cell {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.row__header {
+  font-weight: 700;  
+  padding: 15px;
+}
+
+.row:nth-child(odd) {
+  background-color: var(--table-main-color);
+}
+
+.row:nth-child(even),
+.row__header {
+  background-color: var(--table-second-color);
+}
+
+.cell__username {
+  font-weight: 600;
+}
+
+.row:hover {
+  background-color: var(--table-additional-color);
+  cursor: pointer;
+}

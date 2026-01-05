@@ -10,5 +10,7 @@ body {
   background-color: var(--main-color);
 }
 
-
-
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+}

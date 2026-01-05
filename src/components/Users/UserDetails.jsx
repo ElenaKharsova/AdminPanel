@@ -1,5 +1,3 @@
 export default function UserDetails(){
-  return(
-    <h1>User Details page</h1>
-  );
+  return(<h1>UserDetails</h1>);
 }

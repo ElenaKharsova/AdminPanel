@@ -14,8 +14,6 @@ export async function getUsers(token){
     throw new Error('Http error, status = ' + response.status);
   }
 
-  console.log("getUsers:", data);
-
   return data;
 }
 
@@ -34,6 +32,5 @@ export async function loginUser({username, password}){
       throw new Error('Http error, status = ' + response.status);
     }
     
-    console.log("loginUser data:", data);
     return data;
 }
