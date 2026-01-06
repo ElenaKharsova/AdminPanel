@@ -1,7 +1,7 @@
 import styles from './users.module.css'
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useOutletContext } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getUser } from '../../api';
+import { getUser, putUser } from '../../api';
 import { useAuth } from '../../auth/useAuth';
 
 export default function UserDetails(){
@@ -10,6 +10,8 @@ export default function UserDetails(){
   const params = useParams();
   const userId = params.id;
   const [user, setUser] = useState(null);
+  const [isSaving, setIsSaving] = useState(false)
+  const {updateUser} = useOutletContext();
 
   useEffect(()=>{
     if(!token) return;
@@ -27,6 +29,7 @@ export default function UserDetails(){
 
   function saveUser(event){
     event.preventDefault();
+    setIsSaving(true);
 
     const formData = new FormData(event.currentTarget);
 
@@ -40,6 +43,14 @@ export default function UserDetails(){
     }
 
     console.log('Save data: ', data);
+    
+    putUser(token, data)
+      .then(data=>{
+        setUser(data);
+        updateUser(data);
+      })  
+      .catch(error => console.error("getUsers error:", error))
+      .finally(()=>setIsSaving(false));    
   }
 
   function cancelSave(){
@@ -103,7 +114,8 @@ export default function UserDetails(){
         </div>
         <button
           type='submit'
-          className={`${styles['details__btn']} btn`} 
+          className={`${styles['details__btn']} btn`}
+          disabled={isSaving}
         >
             Save changes
         </button>

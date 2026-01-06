@@ -21,7 +21,7 @@ input:-webkit-autofill:hover {
   -webkit-text-fill-color: var(--font-color-light);
   -webkit-box-shadow: 0 0 0 1000px var(--second-color) inset;
   box-shadow: 0 0 0 1000px var(--second-color) inset;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 
 .input {

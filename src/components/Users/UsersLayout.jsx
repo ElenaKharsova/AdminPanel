@@ -17,26 +17,41 @@ export default function UsersLayout(){
     getUsers(token)
       .then(data=>setUsers(data))
       .catch(error => console.error("getUsers error:", error));
-    }, [token]);
+  }, [token]);
     
-    const filteredUsers = useMemo(()=>{
-      const filterCheck = filter.trim().toLowerCase();
-      let resultUsers = users;
+  const filteredUsers = useMemo(()=>{
+    const filterCheck = filter.trim().toLowerCase();
+    let resultUsers = users;
+  
+    if(filterCheck){
+      resultUsers = users.filter(user=> user.username.toLowerCase().includes(filterCheck));
+    }
     
-      if(filterCheck){
-        resultUsers = users.filter(user=> user.username.toLowerCase().includes(filterCheck));
-      }
+    resultUsers = [...resultUsers].sort((a,b)=>{ 
+      return direction === "up" ? a.id-b.id : b.id - a.id
+    });
     
-      resultUsers = [...resultUsers].sort((a,b)=>{ 
-        return direction === "up" ? a.id-b.id : b.id - a.id
-      });
-    
-      return resultUsers;
-    }, [users, filter, direction]);
+    return resultUsers;
+  }, [users, filter, direction]);
 
-    const context = {
-      direction, setDirection, filter, setFilter, filteredUsers
-    }    
+  function updateUser(userUpdated){
+    setUsers(usersPrev=>{
+      const index = usersPrev.findIndex(userPrev=>userPrev.id === userUpdated.id);
+
+      if(index===-1){
+        return [userUpdated, ...userUpdated]
+      }
+      const usersNewList = [...usersPrev]
+      usersNewList[index]={...usersPrev[index],...userUpdated}
+      return usersNewList;
+    })
+  }
+
+  const context = {
+    direction, setDirection, filter, setFilter, filteredUsers, updateUser
+  }
+
+  
   return(
     <div className="wrap">
       <div className={styles["users-wrap"]}>
