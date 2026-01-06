@@ -4,13 +4,61 @@
   --additional-color: #FF8C38;
   --font-color: #161616;
   --font-color-light: #4D4D4D;
+  --border-color: #D1D5DB;
+  --table-text-color: #7E6148;
+  --table-main-color: #FFF5ED;
+  --table-second-color: #FFEFE2;
+  --table-additional-color: #F3AB55; 
 }
 
 body {
   background-color: var(--main-color);
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover {
+  -webkit-text-fill-color: var(--font-color-light);
+  -webkit-box-shadow: 0 0 0 1000px var(--second-color) inset;
+  box-shadow: 0 0 0 1000px var(--second-color) inset;
+  font-size: 1.5rem;
+}
+
+.input {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 1rem;
+  color: var(--font-color-light);
+  padding: 7px;
+
+  &::placeholder {
+    color: var(--font-color-light);
+    font-size: 1.5rem;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+    border-color: var(--table-text-color);
+  }
+}
+
 .wrap {
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.btn {
+  background-color: var(--additional-color);
+  border: none;
+  border-radius: 6px;
+  color: var(--second-color);
+  font-size: 1rem;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
 }

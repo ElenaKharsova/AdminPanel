@@ -39,16 +39,17 @@ export default function Login(){
             type='text' 
             aria-label='login'
             name='login'
-            className={styles['login-form__input']}
-            placeholder='Email address'/>
+            className={`${styles['login-form__input']} input`}
+            placeholder='Username'
+            spellCheck={false}/>
           <input 
             type='password' 
             aria-label='password'
             name='password'
-            className={styles['login-form__input']} 
+            className={`${styles['login-form__input']} input`}
             placeholder='Password'/>
-        <button className={styles['login-form_btn']}>Sign in</button>
-        {error && <p className='alert'>{error}</p>}
+        <button className={`${styles['login-form_btn']} btn`}>Sign in</button>
+        {error && <p className={styles['alert']}>{error}</p>}
       </form>
     </div>
   );

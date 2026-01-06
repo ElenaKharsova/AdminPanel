@@ -1,14 +1,11 @@
-:root {
-  --table-main-color: #FFF5ED;
-  --table-second-color: #FFEFE2;
-  --table-additional-color: #F3AB55;  
-  --table-text-color: #7E6148;
+.table-wrap {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
 .table {
   border-collapse: collapse;
-  border: 1px solid #F1E1D2;
-  border-radius: 6px;
   font-size: 1rem;
   color: var(--table-text-color);
 }
