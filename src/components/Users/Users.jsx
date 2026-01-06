@@ -1,6 +1,5 @@
 import Table from './Table/Table.jsx';
 import styles from './users.module.css';
-import { useOutletContext } from 'react-router-dom';
 
 export default function Users({context}){
   const {filter, setFilter, direction, setDirection, filteredUsers} = context;

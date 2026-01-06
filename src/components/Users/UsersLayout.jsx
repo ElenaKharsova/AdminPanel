@@ -13,7 +13,7 @@ export default function UsersLayout(){
     
   useEffect(()=>{
     if(!token) return;
-   
+
     getUsers(token)
       .then(data=>setUsers(data))
       .catch(error => console.error("getUsers error:", error));
@@ -35,7 +35,7 @@ export default function UsersLayout(){
     }, [users, filter, direction]);
 
     const context = {
-      users, direction, setDirection, filter, setFilter, filteredUsers
+      direction, setDirection, filter, setFilter, filteredUsers
     }    
   return(
     <div className="wrap">

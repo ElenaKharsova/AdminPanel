@@ -62,3 +62,8 @@ input:-webkit-autofill:hover {
     opacity: 0.8;
   }
 }
+
+.loading {
+  margin-top: 80px;
+  color: var(--table-text-color);
+}
