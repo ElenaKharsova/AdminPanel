@@ -5,31 +5,31 @@ import AuthRequired from './auth/AuthRequired';
 import Login from './components/Login/Login';
 import UsersLayout from './components/Users/UsersLayout';
 import UserCreate from './components/Users/UserCreate';
-import UserDetails from './components/Users/UserDetails'; 
+import UserUpdate from './components/Users/UserUpdate'; 
 import HomeRedirect from './routes/HomeRedirect';
 
 
 export default function App(){
   return(
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<HomeRedirect />}/>
-        <Route path='/login' element={<Login />}/>
-        <Route element={<AuthRequired />}>
-          <Route path='/users' element={<UsersLayout />}>
-            <Route path='new' element={<UserCreate/> }/>
-            <Route path=':id' element={<UserDetails />}/>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<HomeRedirect />}/>
+          <Route path='/login' element={<Login />}/>
+          <Route element={<AuthRequired />}>
+            <Route path='/users' element={<UsersLayout />}>
+              <Route path='new' element={<UserCreate/> }/>
+              <Route path=':id' element={<UserUpdate />}/>
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-    <Toaster className='toast'
-      position='top-center'
-      containerStyle={{ top: '200px'}}
-      toastOptions={{
+        </Routes>
+      </BrowserRouter>
+      <Toaster className='toast'
+        position='top-center'
+        containerStyle={{ top: '200px'}}
+        toastOptions={{
         duration: 2500}}
-    />
+      />
     </>
   );
 }

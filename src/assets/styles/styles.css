@@ -1,4 +1,6 @@
 :root {
+  --content-width: 1440px;
+
   --main-color: #FFF7ED;
   --second-color: #FFFFFF;
   --additional-color: #FF8C38;
@@ -45,7 +47,7 @@ input:-webkit-autofill:hover {
 }
 
 .wrap {
-  max-width: 1200px;
+  max-width: var(--content-width);
   margin: 0 auto;
 }
 

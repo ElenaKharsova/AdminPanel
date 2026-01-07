@@ -5,7 +5,7 @@ import { useParams, useOutletContext } from "react-router-dom";
 import toast from 'react-hot-toast'
 import UserForm from './UserForm'
 
-export default function UserDetails(){
+export default function UserUpdate(){
   const {token} = useAuth();
   const params = useParams();
   const userId = params.id;

@@ -2,10 +2,18 @@
   display: flex;
   width: 100%;
   gap: 15px;
+
+  @media(max-width: 768px){
+    flex-direction: column;
+  }
 }
 
 .user-list-wrap {
   width: 75%;
+
+  @media(max-width: 768px){
+    width: 100%;
+  }
 }
 
 .user-list__header-wrap {
@@ -19,11 +27,21 @@
   color: var(--font-color-light);  
   font-size: 1.7rem;
   margin-left: 50px;
+
+  @media (max-width: 680px) {
+    display: none;
+  }
 }
 
 .header-buttons-wrap {
   display: flex;
   gap: 15px;
+
+  @media (max-width: 680px) {
+    width: 100%;
+    margin-bottom: 15px;
+    justify-content: center;
+  }
 }
 
 .user-list__filter-input::placeholder {
@@ -40,6 +58,16 @@
   border: 1px solid var(--border-color);
   border-radius: 6px;
   height: fit-content;
+
+  @media (max-width: 768px){
+    position: fixed;
+    top: auto;
+    right: auto;
+    left: auto;
+    bottom: 0;
+    margin: 0;
+    width: 98%;
+  }
 }
 
 .details-header {
@@ -52,6 +80,10 @@
   color: var(--table-text-color);  
   font-weight: 700;
   background-color: var(--table-second-color);
+
+  @media (max-width: 768px){
+    text-align: center;
+  }
 }
 
 .details-form {
@@ -60,6 +92,21 @@
   justify-content: flex-start;
   align-items: center;
   padding: 20px;
+  box-sizing: border-box;
+  background-color: var(--table-main-color);
+
+  @media (max-width: 768px) {
+    padding: 5px;
+  }
+}
+
+.details-form__inputs-wrap {
+  @media (max-width: 768px) {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+  }
 }
 
 .details__label {
@@ -67,6 +114,10 @@
   flex-direction: column;
   margin-bottom: 10px;
   color: var(--table-text-color);
+
+  @media (max-width:768px) {
+    width: 100%;
+  }
 }
 
 .details__checkbox-wrap {
@@ -100,7 +151,11 @@
   width: 100%;  
   padding: 10px;
   margin-top: 80px;  
-  background-color: var(--warning-color);  
+  background-color: var(--warning-color);
+
+  @media (max-width: 768px) {
+    margin-top: 7px;
+  }
 }
 
 .create-user-btn {
