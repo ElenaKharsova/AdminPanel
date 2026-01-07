@@ -1,15 +1,18 @@
-import {Outlet} from 'react-router-dom';
+import styles from './users.module.css'
+import {Outlet, useNavigate} from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../auth/useAuth';
-import { getUsers } from '../../api';
+import { deleteUser, getUsers } from '../../api';
 import Users from './Users.jsx';
-import styles from './users.module.css'
+import DeleteUserConfirmModal from './Modal/DeleteUserConfirmModal.jsx';
 
 export default function UsersLayout(){
   const {token} = useAuth();
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [direction, setDirection] = useState("up");  
+  const [deleteUserId, setDeleteUserId] = useState(null);
+  const navigate = useNavigate();
     
   useEffect(()=>{
     if(!token) return;
@@ -39,7 +42,7 @@ export default function UsersLayout(){
       const index = usersPrev.findIndex(userPrev=>userPrev.id === userUpdated.id);
 
       if(index===-1){
-        return [userUpdated, ...userUpdated]
+        return [userUpdated, ...usersPrev]
       }
       const usersNewList = [...usersPrev]
       usersNewList[index]={...usersPrev[index],...userUpdated}
@@ -47,17 +50,61 @@ export default function UsersLayout(){
     })
   }
 
+  function handleDeleteUser(){
+    console.log("Handle delete user starts")
+    if(!deleteUserId) return;
+    deleteUser(token, deleteUserId)
+      .then(()=>{
+        setUsers(prevUsers=> prevUsers.filter(user=>user.id!==deleteUserId));
+        closeModalDeleteUser();
+        navigate('/');
+      })
+      .catch(error=>console.error("deleteUsers error:", error));
+  }
+
+  function openModalDeleteUser(event, userId){
+    event?.preventDefault();
+    setDeleteUserId(userId);
+  
+    const modal = document.querySelector('#modal');
+    const html = document.documentElement;
+    const body = document.body;
+  
+    const marginSize = window.innerWidth - html.clientWidth;
+      
+    if (marginSize) {
+      html.style.marginRight = `${marginSize}px`;
+    }
+  
+    body.classList.add("unscroll");
+    modal.showModal();
+  }
+
+  function closeModalDeleteUser(){
+    const modal = document.querySelector('#modal');
+    const body = document.body;
+    const html = document.documentElement;
+    setDeleteUserId(null);
+  
+    modal.close();
+    html.style.marginRight = "";
+    body.classList.remove("unscroll");
+  }
+
   const context = {
-    direction, setDirection, filter, setFilter, filteredUsers, updateUser
+    direction, setDirection, filter, setFilter, filteredUsers, updateUser, openModalDeleteUser
   }
 
   
   return(
+  <>
     <div className="wrap">
       <div className={styles["users-wrap"]}>
         <Users context={context}/>
         <Outlet context={context}/>
       </div>
     </div>
+    <DeleteUserConfirmModal onHandleDeleteUser={handleDeleteUser} onHandleCloseModal={closeModalDeleteUser}/>
+  </>
   );
 }

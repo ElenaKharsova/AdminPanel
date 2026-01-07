@@ -58,7 +58,7 @@ export async function getUser(token, userId){
 export async function putUser(token, user){
   const authHead = `Token ${token}`
 
-  const response = await fetch(`https://test-assignment.emphasoft.com/api/v1/users/${user.id}/`, 
+  const response = await fetch(`https://test-assignment.emphasoft.com/api/v1/users/${user.id}`, 
   {
     method: 'PUT',
     headers: {
@@ -81,4 +81,25 @@ export async function putUser(token, user){
   }
 
   return data;
+}
+
+export async function deleteUser(token, userId){
+  const authHead = `Token ${token}`
+
+  const response = await fetch(`https://test-assignment.emphasoft.com/api/v1/users/${userId}`,
+  {
+    method: 'DELETE',
+    headers: {
+      'Authorization': authHead,
+    },
+  }
+  );
+  if(!response.ok) {
+    throw new Error('Http error, status = ' + response.status);
+  }
+
+  if (response.status === 204) return null;
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : null;
 }

@@ -1,27 +1,32 @@
 .users-wrap {
   display: flex;
+  width: 100%;
   gap: 15px;
+}
+
+.user-list-wrap {
+  width: 75%;
 }
 
 .user-list__header-wrap {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;  
-  gap: 100px;
+  gap: 10px;
 }
 
 .user-list__header {
   color: var(--font-color-light);  
+  font-size: 1.7rem;
+  margin-left: 50px;
 }
 
-.user-list__filter-input {
-  &::placeholder {
-    font-size: 1rem;
-  }
+.user-list__filter-input::placeholder {
+  font-size: 1rem;
 }
 
 .details-wrap {
-  margin-top: 80px;
+  margin-top: 70px;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--border-color);
@@ -87,5 +92,5 @@
   width: 100%;  
   padding: 10px;
   margin-top: 80px;  
-  background-color: red;  
+  background-color: var(--warning-color);  
 }

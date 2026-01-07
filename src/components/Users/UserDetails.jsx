@@ -11,7 +11,7 @@ export default function UserDetails(){
   const userId = params.id;
   const [user, setUser] = useState(null);
   const [isSaving, setIsSaving] = useState(false)
-  const {updateUser} = useOutletContext();
+  const {updateUser, openModalDeleteUser} = useOutletContext();
 
   useEffect(()=>{
     if(!token) return;
@@ -25,7 +25,6 @@ export default function UserDetails(){
     
 
   if(!user) return <div className='loading'>Loading...</div>;
-  console.log("UserDetails user:", user);
 
   function saveUser(event){
     event.preventDefault();
@@ -33,7 +32,7 @@ export default function UserDetails(){
 
     const formData = new FormData(event.currentTarget);
 
-    const data = {
+    const payload = {
       id: user.id,
       username: formData.get('username')?.toString() ?? '',
       first_name: formData.get('firstName')?.toString() ?? '',
@@ -42,9 +41,9 @@ export default function UserDetails(){
       is_active: formData.get('isActive') === 'on'
     }
 
-    console.log('Save data: ', data);
+    console.log('Save data: ', payload);
     
-    putUser(token, data)
+    putUser(token, payload)
       .then(data=>{
         setUser(data);
         updateUser(data);
@@ -55,10 +54,6 @@ export default function UserDetails(){
 
   function cancelSave(){
     navigate('/')
-  }
-
-  function deleteUser(){
-
   }
 
   return(
@@ -72,6 +67,7 @@ export default function UserDetails(){
             className={`${styles['details__input']} input`}
             defaultValue={user.username ?? ''}
             spellCheck={false}
+            maxLength={20}
           />
         </label>
         <label className={styles['details__label']}>First name
@@ -81,6 +77,7 @@ export default function UserDetails(){
             className={`${styles['details__input']} input`} 
             defaultValue={user.first_name ?? ''}
             spellCheck={false}
+            maxLength={20}
           />
         </label>
         <label className={styles['details__label']}>Last name
@@ -90,6 +87,7 @@ export default function UserDetails(){
             className={`${styles['details__input']} input`} 
             defaultValue={user.last_name ?? ''}
             spellCheck={false}
+            maxLength={20}
           />
         </label>
         <label className={styles['details__label']}>Password
@@ -98,6 +96,7 @@ export default function UserDetails(){
             name='password'
             className={`${styles['details__input']} input`}
             spellCheck={false}
+            maxLength={20}
           />
         </label>      
         <div >      
@@ -117,7 +116,7 @@ export default function UserDetails(){
           className={`${styles['details__btn']} btn`}
           disabled={isSaving}
         >
-            Save changes
+          Save changes
         </button>
         <button
           type='button'
@@ -128,7 +127,7 @@ export default function UserDetails(){
         <button 
           type='button'
           className={`${styles['delete-btn']} btn`}
-          onClick={deleteUser}>
+          onClick={(e)=>openModalDeleteUser(e, userId)}>
             Delete user
         </button>
       </form>

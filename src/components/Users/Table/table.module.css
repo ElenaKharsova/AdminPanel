@@ -5,6 +5,7 @@
 }
 
 .table {
+  width: 100%;
   border-collapse: collapse;
   font-size: 1rem;
   color: var(--table-text-color);
@@ -34,14 +35,19 @@
   font-weight: 600;
 }
 
-.row:hover {
+.row:hover,
+.row:active {
   background-color: var(--table-additional-color);
   cursor: pointer;
 }
 
+.table .row_active {
+  background-color: var(--table-additional-color);
+}
+
 .header-cell__ID {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 5px;
 

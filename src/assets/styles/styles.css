@@ -9,6 +9,7 @@
   --table-main-color: #FFF5ED;
   --table-second-color: #FFEFE2;
   --table-additional-color: #F3AB55; 
+  --warning-color: #f53a3a;
 }
 
 body {
@@ -66,4 +67,8 @@ input:-webkit-autofill:hover {
 .loading {
   margin-top: 80px;
   color: var(--table-text-color);
+}
+
+.unscroll {
+  overflow: hidden;
 }
