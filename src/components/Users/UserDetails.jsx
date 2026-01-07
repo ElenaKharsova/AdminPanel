@@ -1,11 +1,11 @@
-import styles from './users.module.css'
-import { useParams, useNavigate, useOutletContext } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getUser, putUser } from '../../api';
 import { useAuth } from '../../auth/useAuth';
+import { getUser, putUser } from '../../api';
+import { useEffect, useState } from "react";
+import { useParams, useOutletContext } from "react-router-dom";
+import toast from 'react-hot-toast'
+import UserForm from './UserForm'
 
 export default function UserDetails(){
-  const navigate = useNavigate();
   const {token} = useAuth();
   const params = useParams();
   const userId = params.id;
@@ -40,97 +40,28 @@ export default function UserDetails(){
       password: formData.get('password')?.toString() ?? '',
       is_active: formData.get('isActive') === 'on'
     }
-
-    console.log('Save data: ', payload);
     
     putUser(token, payload)
       .then(data=>{
         setUser(data);
         updateUser(data);
+        toast.success('Changes saved');
       })  
-      .catch(error => console.error("getUsers error:", error))
+      .catch(error => {
+        console.error("getUsers error:", error);
+        toast.error('Could not save changes');
+        })
       .finally(()=>setIsSaving(false));    
   }
 
-  function cancelSave(){
-    navigate('/')
-  }
-
   return(
-    <div className={styles['details-wrap']}>
-      <h3 className={styles['details-header']}>Edit User</h3>
-      <form className={styles['details-form']} key={userId} onSubmit={saveUser}>
-        <label className={styles['details__label']}>Username
-          <input 
-            type='text' 
-            name='username'
-            className={`${styles['details__input']} input`}
-            defaultValue={user.username ?? ''}
-            spellCheck={false}
-            maxLength={20}
-          />
-        </label>
-        <label className={styles['details__label']}>First name
-          <input 
-            type='text'
-            name='firstName'
-            className={`${styles['details__input']} input`} 
-            defaultValue={user.first_name ?? ''}
-            spellCheck={false}
-            maxLength={20}
-          />
-        </label>
-        <label className={styles['details__label']}>Last name
-          <input 
-            type='text' 
-            name='lastName'
-            className={`${styles['details__input']} input`} 
-            defaultValue={user.last_name ?? ''}
-            spellCheck={false}
-            maxLength={20}
-          />
-        </label>
-        <label className={styles['details__label']}>Password
-          <input 
-            type='text'
-            name='password'
-            className={`${styles['details__input']} input`}
-            spellCheck={false}
-            maxLength={20}
-          />
-        </label>      
-        <div >      
-          <label className={`${styles["checkbox__label"]} ${styles["details__checkbox-wrap"]}`}>
-            <input 
-              type='checkbox' 
-              id='isActive'
-              name='isActive' 
-              defaultChecked={user.is_active}
-              className={styles['details__checkbox']}
-            />
-            <span>Active user</span>
-          </label>
-        </div>
-        <button
-          type='submit'
-          className={`${styles['details__btn']} btn`}
-          disabled={isSaving}
-        >
-          Save changes
-        </button>
-        <button
-          type='button'
-          className={`${styles['details__btn']} ${styles['btn__cancel']} btn`}
-          onClick={cancelSave}>
-            Cancel
-        </button>
-        <button 
-          type='button'
-          className={`${styles['delete-btn']} btn`}
-          onClick={(e)=>openModalDeleteUser(e, userId)}>
-            Delete user
-        </button>
-      </form>
-    </div>
+    <UserForm 
+      mode={'update'}
+      user={user} 
+      userId={userId} 
+      saveUser={saveUser} 
+      isSaving={isSaving} 
+      openModalDeleteUser={openModalDeleteUser}
+    />
   );
 }

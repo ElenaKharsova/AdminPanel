@@ -1,5 +1,6 @@
 import styles from './users.module.css'
 import {Outlet, useNavigate} from 'react-router-dom';
+import toast from 'react-hot-toast'
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../auth/useAuth';
 import { deleteUser, getUsers } from '../../api';
@@ -57,9 +58,14 @@ export default function UsersLayout(){
       .then(()=>{
         setUsers(prevUsers=> prevUsers.filter(user=>user.id!==deleteUserId));
         closeModalDeleteUser();
+        toast.success('User deleted');
         navigate('/');
       })
       .catch(error=>console.error("deleteUsers error:", error));
+  }
+
+  function createUser(){
+    navigate('new');
   }
 
   function openModalDeleteUser(event, userId){
@@ -92,17 +98,18 @@ export default function UsersLayout(){
   }
 
   const context = {
-    direction, setDirection, filter, setFilter, filteredUsers, updateUser, openModalDeleteUser
+    setUsers, direction, setDirection, filter, setFilter, 
+    filteredUsers, updateUser, createUser, openModalDeleteUser
   }
 
   
   return(
   <>
     <div className="wrap">
-      <div className={styles["users-wrap"]}>
+      <main className={styles["users-wrap"]}>
         <Users context={context}/>
         <Outlet context={context}/>
-      </div>
+      </main>
     </div>
     <DeleteUserConfirmModal onHandleDeleteUser={handleDeleteUser} onHandleCloseModal={closeModalDeleteUser}/>
   </>

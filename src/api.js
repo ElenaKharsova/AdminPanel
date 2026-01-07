@@ -103,3 +103,35 @@ export async function deleteUser(token, userId){
   const text = await response.text();
   return text ? JSON.parse(text) : null;
 }
+
+export async function postUser(token, user){
+  const authHead = `Token ${token}`;
+
+  const response = await fetch('https://test-assignment.emphasoft.com/api/v1/users/',
+    {
+      method: 'POST',
+      headers: {
+        'Authorization': authHead,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username: user.username,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        password: user.password,
+        is_active: user.is_active
+      })
+    })
+
+  if(!response.ok) {
+    throw new Error('Http error, status = ' + response.status);
+  }
+  if (response.status === 400) {
+    const text = await response.text();
+    console.log("error message:", text);
+    return text ? JSON.parse(text) : null;
+  }  
+
+  const data = await response.json();  
+  return data;
+}

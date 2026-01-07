@@ -4,14 +4,6 @@ import ArrowIcon from './ArrowIcon.jsx';
 import clsx from "clsx";
 
 export default function Table({users, direction, changeSorting}){
-
-  /*function openUserDetails(id){
-    console.log("userDetails ID:", id);
-    setSearchParams({id: id});
-    console.log("Params ", params);
-    console.log("Open user details, searchParams:", searchParams.get("id"));
-  }*/
-
   const userList = users.map(user=>{
       return (
         <Row user={user} key={user.id}/>
