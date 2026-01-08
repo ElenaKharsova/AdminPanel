@@ -3,15 +3,21 @@ import Header from './Header.jsx'
 import styles from './users.module.css';
 
 export default function Users({context}){
-  const {filter, setFilter, direction, setDirection, filteredUsers, createUser} = context;
+  const {filter, setFilter, sort, setAllSearchParams, filteredUsers, createUser} = context;
   function changeSorting(){
-    setDirection(prev=>prev==="up" ? "down" : "up");
+    const changedSort = sort === 'asc' ? 'desc' : 'asc'
+    setAllSearchParams('sort', changedSort);
   }
   
   return(
       <div className={styles['user-list-wrap']}>
-        <Header filter={filter} setFilter={setFilter} createUser={createUser}/>
-        <Table users={filteredUsers} direction={direction} changeSorting={changeSorting}/>
+        <Header 
+          filter={filter} 
+          setFilter={setFilter} 
+          createUser={createUser} 
+          setAllSearchParams={setAllSearchParams}
+        />
+        <Table users={filteredUsers} sort={sort} changeSorting={changeSorting}/>
       </div>
   );
 }

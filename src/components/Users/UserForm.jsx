@@ -6,7 +6,7 @@ export default function UserForm({mode, user, userId, saveUser, isSaving, openMo
   const navigate = useNavigate();
 
   function cancel(){
-    navigate('/')
+    navigate('/');
   }
 
   return(

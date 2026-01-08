@@ -1,7 +1,23 @@
+import { useEffect } from 'react';
 import styles from './users.module.css'
 import clsx from 'clsx'
+import { useSearchParams } from 'react-router-dom';
 
-export default function Header({filter, setFilter, createUser}){
+export default function Header({filter, setFilter, createUser, setAllSearchParams}){
+  const [searchParams] = useSearchParams();
+
+  useEffect(()=>{
+    const newFilter = searchParams.get('filter') ?? '';
+    if( newFilter === filter){
+      return;
+    } 
+    const timer = setTimeout(()=>{
+      setAllSearchParams('filter', filter);
+    }, 300);
+    
+    return ()=>clearTimeout(timer);
+  },[filter, setAllSearchParams, searchParams])
+
   return(
     <div className={styles['user-list__header-wrap']}>
       <h1 className={styles['user-list__header']}>User List</h1>

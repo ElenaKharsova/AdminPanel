@@ -3,7 +3,7 @@ import Row from './Row.jsx';
 import ArrowIcon from './ArrowIcon.jsx';
 import clsx from "clsx";
 
-export default function Table({users, direction, changeSorting}){
+export default function Table({users, sort, changeSorting}){
   const userList = users.map(user=>{
       return (
         <Row user={user} key={user.id}/>
@@ -20,7 +20,7 @@ export default function Table({users, direction, changeSorting}){
             onClick={changeSorting}>
                 <span>ID</span>
                 <span className={styles['header-cell__sort-icon']}>
-                  <ArrowIcon direction={direction}/>
+                  <ArrowIcon sort={sort}/>
                 </span>
             </th>
             <th className={styles['header__cell']}>Username</th>

@@ -1,7 +1,7 @@
 import styles from './users.module.css'
-import {Outlet, useNavigate} from 'react-router-dom';
+import {Outlet, useNavigate, useSearchParams} from 'react-router-dom';
 import toast from 'react-hot-toast'
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../../auth/useAuth';
 import { deleteUser, getUsers } from '../../api';
 import Users from './Users.jsx';
@@ -9,11 +9,13 @@ import DeleteUserConfirmModal from './Modal/DeleteUserConfirmModal.jsx';
 
 export default function UsersLayout(){
   const {token} = useAuth();
-  const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("");
-  const [direction, setDirection] = useState("up");  
-  const [deleteUserId, setDeleteUserId] = useState(null);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [users, setUsers] = useState([]);
+  const [filter, setFilter] = useState(searchParams.get('filter') ?? '');
+  const [deleteUserId, setDeleteUserId] = useState(null);  
+  
+  const sort = searchParams.get('sort') === 'desc' ? 'desc' : 'asc';
     
   useEffect(()=>{
     if(!token) return;
@@ -25,18 +27,18 @@ export default function UsersLayout(){
     
   const filteredUsers = useMemo(()=>{
     const filterCheck = filter.trim().toLowerCase();
-    let resultUsers = users;
+    let resultUsers = [...users];
   
     if(filterCheck){
       resultUsers = users.filter(user=> user.username.toLowerCase().includes(filterCheck));
     }
     
     resultUsers = [...resultUsers].sort((a,b)=>{ 
-      return direction === "up" ? a.id-b.id : b.id - a.id
+      return sort === "asc" ? a.id-b.id : b.id - a.id
     });
     
     return resultUsers;
-  }, [users, filter, direction]);
+  }, [users, filter, sort]);
 
   function updateUser(userUpdated){
     setUsers(usersPrev=>{
@@ -52,20 +54,19 @@ export default function UsersLayout(){
   }
 
   function handleDeleteUser(){
-    console.log("Handle delete user starts")
     if(!deleteUserId) return;
     deleteUser(token, deleteUserId)
       .then(()=>{
         setUsers(prevUsers=> prevUsers.filter(user=>user.id!==deleteUserId));
         closeModalDeleteUser();
         toast.success('User deleted');
-        navigate('/');
+        navigate(`/`);
       })
       .catch(error=>console.error("deleteUsers error:", error));
   }
 
   function createUser(){
-    navigate('new');
+    navigate(`new?${searchParams}`);
   }
 
   function openModalDeleteUser(event, userId){
@@ -97,10 +98,33 @@ export default function UsersLayout(){
     body.classList.remove("unscroll");
   }
 
-  const context = {
-    setUsers, direction, setDirection, filter, setFilter, 
-    filteredUsers, updateUser, createUser, openModalDeleteUser
-  }
+  const setAllSearchParams = useCallback((key, value)=>{  
+    console.log('setAllSearchParams', key, value);
+    
+    setSearchParams(prevParams=>{
+      const prevValue = prevParams.get(key) ?? '';
+      const newValue = value === null ? '' : String(value);
+
+      if(prevValue===newValue){
+        return prevValue;
+      }
+
+      if(value===null) {
+        prevParams.delete(key)
+      } else {
+        prevParams.set(key, value)  
+      }
+      return prevParams;
+    })  
+  },[setSearchParams])
+
+  const context = useMemo(()=>({
+    sort,  filter, setFilter, filteredUsers, createUser, setAllSearchParams }),
+    [sort,  filter, setFilter, filteredUsers, createUser, setAllSearchParams]);
+
+  const contextOut = useMemo(()=>({ 
+    updateUser, setUsers , openModalDeleteUser }),
+    [updateUser, setUsers , openModalDeleteUser]);
 
   
   return(
@@ -108,7 +132,7 @@ export default function UsersLayout(){
     <div className="wrap">
       <main className={styles["users-wrap"]}>
         <Users context={context}/>
-        <Outlet context={context}/>
+        <Outlet context={contextOut}/>
       </main>
     </div>
     <DeleteUserConfirmModal onHandleDeleteUser={handleDeleteUser} onHandleCloseModal={closeModalDeleteUser}/>
