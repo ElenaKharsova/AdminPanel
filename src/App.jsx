@@ -7,6 +7,7 @@ import UsersLayout from './components/Users/UsersLayout';
 import UserCreate from './components/Users/UserCreate';
 import UserUpdate from './components/Users/UserUpdate'; 
 import HomeRedirect from './routes/HomeRedirect';
+import NotFound from './components/404NotFound'
 
 
 export default function App(){
@@ -22,6 +23,7 @@ export default function App(){
               <Route path=':id' element={<UserUpdate />}/>
             </Route>
           </Route>
+          <Route path='*' element={<NotFound/>}></Route>
         </Routes>
       </BrowserRouter>
       <Toaster className='toast'

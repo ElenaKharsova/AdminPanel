@@ -36,7 +36,7 @@ input:-webkit-autofill:hover {
 
   &::placeholder {
     color: var(--font-color-light);
-    font-size: 1.5rem;
+    font-size: 1rem;
   }
 
   &:focus,
@@ -84,3 +84,28 @@ input:-webkit-autofill:hover {
   background-color: var(--table-second-color);
   color: var(--table-text-color);
 }
+
+.not-found-wrap {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+.return-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  height: 25px;
+  padding: 10px;
+  background-color: var(--font-color-light);
+  color: var(--second-color);
+  border-radius: 15px;
+    
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+  }
