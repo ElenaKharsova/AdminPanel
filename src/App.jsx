@@ -13,7 +13,7 @@ import NotFound from './components/404NotFound'
 export default function App(){
   return(
     <>
-      <BrowserRouter>
+      <BrowserRouter basename='/AdminPanel'>
         <Routes>
           <Route path='/' element={<HomeRedirect />}/>
           <Route path='/login' element={<Login />}/>
