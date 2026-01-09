@@ -13,18 +13,25 @@ export default function UsersLayout(){
   const [searchParams, setSearchParams] = useSearchParams();
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState(searchParams.get('filter') ?? '');
-  const [deleteUserId, setDeleteUserId] = useState(null);  
+  const [deleteUserId, setDeleteUserId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); 
   
   const sort = searchParams.get('sort') === 'desc' ? 'desc' : 'asc';
     
   useEffect(()=>{
     if(!token) return;
 
+    setIsLoading(true);
+    console.log("isLoading started", isLoading)
     getUsers(token)
       .then(data=>setUsers(data))
-      .catch(error => console.error("getUsers error:", error));
+      .catch(error => console.error("getUsers error:", error))
+      .finally(()=>{
+        setIsLoading(false);
+        console.log("isLoading finished", isLoading)
+      });
   }, [token]);
-    
+    console.log("isLoading component", isLoading)
   const filteredUsers = useMemo(()=>{
     const filterCheck = filter.trim().toLowerCase();
     let resultUsers = [...users];
@@ -60,7 +67,7 @@ export default function UsersLayout(){
         setUsers(prevUsers=> prevUsers.filter(user=>user.id!==deleteUserId));
         closeModalDeleteUser();
         toast.success('User deleted');
-        navigate(`/`);
+        navigate(`/`, {replace: true});
       })
       .catch(error=>console.error("deleteUsers error:", error));
   }
@@ -99,7 +106,6 @@ export default function UsersLayout(){
   }
 
   const setAllSearchParams = useCallback((key, value)=>{  
-    console.log('setAllSearchParams', key, value);
     
     setSearchParams(prevParams=>{
       const prevValue = prevParams.get(key) ?? '';
@@ -115,12 +121,12 @@ export default function UsersLayout(){
         prevParams.set(key, value)  
       }
       return prevParams;
-    })  
+    }, {replace: true})  
   },[setSearchParams])
 
   const context = useMemo(()=>({
-    sort,  filter, setFilter, filteredUsers, createUser, setAllSearchParams }),
-    [sort,  filter, setFilter, filteredUsers, createUser, setAllSearchParams]);
+    sort, isLoading, filter, setFilter, filteredUsers, createUser, setAllSearchParams }),
+    [sort, isLoading, filter, setFilter, filteredUsers, createUser, setAllSearchParams]);
 
   const contextOut = useMemo(()=>({ 
     updateUser, setUsers , openModalDeleteUser }),

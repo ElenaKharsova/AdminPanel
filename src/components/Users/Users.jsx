@@ -3,7 +3,7 @@ import Header from './Header.jsx'
 import styles from './users.module.css';
 
 export default function Users({context}){
-  const {filter, setFilter, sort, setAllSearchParams, filteredUsers, createUser} = context;
+  const {isLoading, filter, setFilter, sort, setAllSearchParams, filteredUsers, createUser} = context;
   function changeSorting(){
     const changedSort = sort === 'asc' ? 'desc' : 'asc'
     setAllSearchParams('sort', changedSort);
@@ -17,7 +17,7 @@ export default function Users({context}){
           createUser={createUser} 
           setAllSearchParams={setAllSearchParams}
         />
-        <Table users={filteredUsers} sort={sort} changeSorting={changeSorting}/>
+        <Table users={filteredUsers} sort={sort} changeSorting={changeSorting} isLoading={isLoading}/>
       </div>
   );
 }

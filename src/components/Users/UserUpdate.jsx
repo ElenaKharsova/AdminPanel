@@ -23,9 +23,6 @@ export default function UserUpdate(){
     .catch(error => console.error("getUsers error:", error))
   },[userId, token])
     
-
-  if(!user) return <div className='loading'>Loading...</div>;
-
   function saveUser(event){
     event.preventDefault();
     setIsSaving(true);
@@ -53,6 +50,8 @@ export default function UserUpdate(){
         })
       .finally(()=>setIsSaving(false));    
   }
+
+  if(!user) return <div className='loading'>Loading...</div>;
 
   return(
     <UserForm 
