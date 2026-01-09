@@ -27,13 +27,14 @@ export default function Login(){
       })
       .catch((error) => {
         console.error("loginUser error:", error);
-        setError("Login failed. Please check your credentials and try again.");
+        setError('Login failed. Please check your credentials and try again.');
       })
   }    
 
   return(
     <div className={styles["login-wrap"]}>
-      <h1>Sign in to your account</h1>
+      <h1 className={styles['login-header']}>Sign in to your account</h1>
+      <div className={styles['alert']}>{error}</div>
       <form onSubmit={login} className={styles['login-form']} >
           <input                  
             type='text' 
@@ -49,7 +50,6 @@ export default function Login(){
             className={`${styles['login-form__input']} input`}
             placeholder='Password'/>
         <button className={`${styles['login-form_btn']} btn`}>Sign in</button>
-        {error && <p className={styles['alert']}>{error}</p>}
       </form>
     </div>
   );

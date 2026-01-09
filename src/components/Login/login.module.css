@@ -1,10 +1,9 @@
 .login-wrap {
   margin: 0 auto;
   margin-top: 100px;
-  display: flex;
+  display: grid;
+  grid-template-rows: auto minmax(1em, auto);
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 .login-form {
@@ -12,12 +11,12 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  max-width: 500px;
 }
 
 .login-form__input {
   height: 42px;
   width: 100%;
+  max-width: 300px;
   font-size: 1rem;
 }
 
@@ -25,8 +24,15 @@
   margin-top: 22px;
   height: 42px;
   width: 100%;
+  max-width: 300px;
+}
+
+.login-header {
+  text-align: center;
 }
 
 .alert {
+  text-align: center;
   color: red;
+  min-height: 3rem;
 }
