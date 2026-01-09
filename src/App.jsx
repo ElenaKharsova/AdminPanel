@@ -16,9 +16,9 @@ export default function App(){
       <BrowserRouter basename='/AdminPanel'>
         <Routes>
           <Route path='/' element={<HomeRedirect />}/>
-          <Route path='/login' element={<Login />}/>
+          <Route path='login' element={<Login />}/>
           <Route element={<AuthRequired />}>
-            <Route path='/users' element={<UsersLayout />}>
+            <Route path='users' element={<UsersLayout />}>
               <Route path='new' element={<UserCreate/> }/>
               <Route path=':id' element={<UserUpdate />}/>
             </Route>
