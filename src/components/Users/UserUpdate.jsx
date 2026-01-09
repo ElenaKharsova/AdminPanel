@@ -51,7 +51,7 @@ export default function UserUpdate(){
       .finally(()=>setIsSaving(false));    
   }
 
-  if(!user) return <div className='loading'>Loading...</div>;
+  if(!user) return <div className='loading' role="status">Loading...</div>;
 
   return(
     <UserForm 

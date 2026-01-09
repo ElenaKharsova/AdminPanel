@@ -9,8 +9,8 @@ export default function Table({users, sort, changeSorting, isLoading}){
         <Row user={user} key={user.id}/>
       );
     })
-  console.log("isLoading user list", isLoading)
-  if(isLoading) return <div className='loading'>Loading...</div>;
+
+    if(isLoading) return <div className='loading' role="status">Loading...</div>;
 
   return(
     <div className={styles["table-wrap"]}>

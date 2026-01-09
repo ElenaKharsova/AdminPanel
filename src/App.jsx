@@ -1,5 +1,5 @@
 
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import {HashRouter, Routes, Route} from 'react-router-dom';
 import {Toaster} from 'react-hot-toast'
 import AuthRequired from './auth/AuthRequired';
 import Login from './components/Login/Login';
@@ -13,7 +13,7 @@ import NotFound from './components/404NotFound'
 export default function App(){
   return(
     <>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <HashRouter basename={import.meta.env.BASE_URL}>
         <Routes>
           <Route path='/' element={<HomeRedirect />}/>
           <Route path='login' element={<Login />}/>
@@ -25,7 +25,7 @@ export default function App(){
           </Route>
           <Route path='*' element={<NotFound/>}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
       <Toaster className='toast'
         position='top-center'
         containerStyle={{ top: '200px'}}

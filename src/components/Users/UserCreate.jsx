@@ -30,7 +30,7 @@ export default function UserCreate(){
       .then(data=>{
         setUsers(curUsers=>[...curUsers, data]);
         toast.success('User created');
-        navigate('/');
+        navigate('..');
       })
       .catch(error=>{
         console.error("createUsers error:", error);

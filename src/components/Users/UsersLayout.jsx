@@ -22,16 +22,13 @@ export default function UsersLayout(){
     if(!token) return;
 
     setIsLoading(true);
-    console.log("isLoading started", isLoading)
     getUsers(token)
       .then(data=>setUsers(data))
       .catch(error => console.error("getUsers error:", error))
       .finally(()=>{
         setIsLoading(false);
-        console.log("isLoading finished", isLoading)
       });
   }, [token]);
-    console.log("isLoading component", isLoading)
   const filteredUsers = useMemo(()=>{
     const filterCheck = filter.trim().toLowerCase();
     let resultUsers = [...users];
@@ -67,7 +64,7 @@ export default function UsersLayout(){
         setUsers(prevUsers=> prevUsers.filter(user=>user.id!==deleteUserId));
         closeModalDeleteUser();
         toast.success('User deleted');
-        navigate(`/`, {replace: true});
+        navigate('..', {replace: true});
       })
       .catch(error=>console.error("deleteUsers error:", error));
   }
