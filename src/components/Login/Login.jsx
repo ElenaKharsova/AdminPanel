@@ -1,17 +1,20 @@
-import { useState } from 'react';
 import styles from './login.module.css';
-import {loginUser} from '../../api'
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/useAuth';
+import {loginUser} from '../../api'
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 export default function Login(){
   const navigate = useNavigate();
   const { setLoginData } = useAuth();  
   const [error, setError] = useState(null);
+  const [status, setStatus] = useState('idle');
+  const location = useLocation();
 
   function login(e){
     e.preventDefault();
     setError(null);
+    setStatus('submitting');
 
     const formData = new FormData(e.target);
     const credentials = {
@@ -21,20 +24,26 @@ export default function Login(){
 
     loginUser(credentials)
       .then((data) => {
-        console.log("Login successful", data.token);
+        const path = 
+          `${location?.state?.pathname || ''}${location?.state?.search || ''}` 
+          || '/users';
+        console.log("path", path);
         setLoginData(data.token);
-        navigate('/users', {replace: true});
+        navigate(path, {replace: true});
       })
       .catch((error) => {
         console.error("loginUser error:", error);
         setError('Login failed. Please check your credentials and try again.');
+      })
+      .finally(()=>{
+        setStatus('idle');
       })
   }    
 
   return(
     <div className={styles["login-wrap"]}>
       <h1 className={styles['login-header']}>Sign in to your account</h1>
-      <div className={styles['alert']}>{error}</div>
+      <div className={styles['alert']}>{error ?? ''}</div>
       <form onSubmit={login} className={styles['login-form']} >
           <input                  
             type='text' 
@@ -49,7 +58,10 @@ export default function Login(){
             name='password'
             className={`${styles['login-form__input']} input`}
             placeholder='Password'/>
-        <button className={`${styles['login-form_btn']} btn`}>Sign in</button>
+        <button 
+          className={`${styles['login-form_btn']} btn`}
+          disabled = {status!=='idle'} 
+        >Sign in</button>
       </form>
     </div>
   );

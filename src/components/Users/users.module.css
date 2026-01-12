@@ -181,6 +181,11 @@
   width: 100%;
   padding: 8px 0;
   margin-top: 7px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .btn__cancel {
