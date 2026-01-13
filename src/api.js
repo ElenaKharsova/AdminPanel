@@ -1,19 +1,36 @@
 export async function loginUser({username, password}){
-    const response = await fetch("https://test-assignment.emphasoft.com/api/v1/login/", {
+  let response;
+
+  try {
+    response = await fetch("https://test-assignment.emphasoft.com/api/v1/login/", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
         },
       body: JSON.stringify({username: username, password: password}),
     })
+  }
+  catch(originalError){
+    throw new Error('NETWORK_ERROR', {cause: originalError});
+  }
 
-    const data = await response.json();
+  const raw = await response.text();
+  let data;
+  try {
+    data = raw ? JSON.parse(raw) : null;
+  }
+  catch {
+    data = null;
+  }
 
-    if(!response.ok){        
-      throw new Error('Http error, status = ' + response.status);
-    }
-    
-    return data;
+  if(!response.ok){        
+    const error = new Error('HTTP_ERROR');
+    error.status = response.status;
+    error.data = data;
+    throw error;
+  }
+  
+  return data;
 }
 
 export async function getUsers(token){
@@ -128,7 +145,6 @@ export async function postUser(token, user){
   }
   if (response.status === 400) {
     const text = await response.text();
-    console.log("error message:", text);
     return text ? JSON.parse(text) : null;
   }  
 

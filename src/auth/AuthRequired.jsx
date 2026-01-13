@@ -5,7 +5,6 @@ export default function AuthRequired(){
 
   const {isAuthenticated} = useAuth();
   const location = useLocation();
-  console.log("location", location);
 
     if(!isAuthenticated){
       return <Navigate 

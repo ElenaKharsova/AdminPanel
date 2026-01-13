@@ -33,13 +33,26 @@ export default function Login(){
         const path = 
           `${location?.state?.pathname || ''}${location?.state?.search || ''}` 
           || '/users';
-        console.log("path", path);
         setLoginData(data.token);
         navigate(path, {replace: true});
       })
-      .catch((error) => {
-        console.error("loginUser error:", error);
-        setError('Login failed. Please check your credentials and try again.');
+      .catch(error => {
+        if(error.message === 'NETWORK_ERROR'){
+          setError('Network error. Check your internet connection and try again.');
+          return;
+        }
+
+        if(error.status === 401 || error.status === 403){
+          setError('Invalid username or password.');
+          return;
+        }
+
+        if(error.status >= 500){
+          setError('Server error. Please try again later.');
+          return;
+        }
+        
+        setError("Login failed. Please try again.");        
       })
       .finally(()=>{
         setStatus('idle');
