@@ -14,13 +14,19 @@ export default function Login(){
   function login(e){
     e.preventDefault();
     setError(null);
-    setStatus('submitting');
 
     const formData = new FormData(e.target);
     const credentials = {
-      username: formData.get("login"),
-      password: formData.get("password")
+      username: formData.get("login")?.toString().trim(),
+      password: formData.get("password")?.toString()
     };
+
+    if(!credentials.username || !credentials.password){
+      setError(`Login and password can't be empty`);
+      return;
+    }
+    
+    setStatus('submitting');
 
     loginUser(credentials)
       .then((data) => {
