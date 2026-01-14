@@ -62,7 +62,7 @@ export default function Login(){
   return(
     <div className={styles["login-wrap"]}>
       <h1 className={styles['login-header']}>Sign in to your account</h1>
-      <div className={styles['alert']}>{error ?? ''}</div>
+      <div className='alert'>{error ?? ''}</div>
       <form onSubmit={login} className={styles['login-form']} >
           <input                  
             type='text' 
@@ -70,13 +70,16 @@ export default function Login(){
             name='login'
             className={`${styles['login-form__input']} input`}
             placeholder='Username'
-            spellCheck={false}/>
+            spellCheck={false}
+            autoComplete='username'/>
           <input 
             type='password' 
             aria-label='password'
             name='password'
             className={`${styles['login-form__input']} input`}
-            placeholder='Password'/>
+            placeholder='Password'
+            autoComplete='current-password'
+            />
         <button 
           className={`${styles['login-form_btn']} btn`}
           disabled = {status!=='idle'} 

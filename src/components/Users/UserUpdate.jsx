@@ -12,15 +12,30 @@ export default function UserUpdate(){
   const [user, setUser] = useState(null);
   const [isSaving, setIsSaving] = useState(false)
   const {updateUser, openModalDeleteUser} = useOutletContext();
+  const [error, setError] = useState(null);
 
   useEffect(()=>{
     if(!token) return;
 
+    setError(null);
     setUser(null);
 
     getUser(token, userId)
     .then((data)=>setUser(data))
-    .catch(error => console.error("getUsers error:", error))
+    .catch(error => {
+      if(error.message === 'NETWORK_ERROR'){
+        setError('Network error. Check your internet connection and try again.');
+        return;
+      }        
+      if(error.status === 401 || error.status === 403){
+        setError('Login, please');
+        return;
+      }
+      if(error.status >= 500){
+        setError('Server error. Please try again later.');
+        return;
+      }
+    })
   },[userId, token])
     
   function saveUser(event){
@@ -31,7 +46,7 @@ export default function UserUpdate(){
 
     const payload = {
       id: user.id,
-      username: formData.get('username')?.toString() ?? '',
+      username: formData.get('username')?.toString().trim() ?? '',
       first_name: formData.get('firstName')?.toString() ?? '',
       last_name: formData.get('lastName')?.toString() ?? '',
       password: formData.get('password')?.toString() ?? '',
@@ -61,6 +76,7 @@ export default function UserUpdate(){
       saveUser={saveUser} 
       isSaving={isSaving} 
       openModalDeleteUser={openModalDeleteUser}
+      error={error}
     />
   );
 }

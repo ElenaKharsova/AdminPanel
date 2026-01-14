@@ -15,6 +15,7 @@ export default function UsersLayout(){
   const [filter, setFilter] = useState(searchParams.get('filter') ?? '');
   const [deleteUserId, setDeleteUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false); 
+  const [error, setError] = useState(null);
   
   const sort = searchParams.get('sort') === 'desc' ? 'desc' : 'asc';
     
@@ -24,7 +25,20 @@ export default function UsersLayout(){
     setIsLoading(true);
     getUsers(token)
       .then(data=>setUsers(data))
-      .catch(error => console.error("getUsers error:", error))
+      .catch(error => {
+        if(error.message === 'NETWORK_ERROR'){
+          setError('Network error. Check your internet connection and try again.');
+          return;
+        }        
+        if(error.status === 401 || error.status === 403){
+          setError('Login, please');
+          return;
+        }
+        if(error.status >= 500){
+          setError('Server error. Please try again later.');
+          return;
+        }
+      })
       .finally(()=>{
         setIsLoading(false);
       });
@@ -66,7 +80,20 @@ export default function UsersLayout(){
         toast.success('User deleted');
         navigate('..', {replace: true});
       })
-      .catch(error=>console.error("deleteUsers error:", error));
+      .catch(error=>{
+        if(error.message === 'NETWORK_ERROR'){
+          setError('Network error. Check your internet connection and try again.');
+          return;
+        }        
+        if(error.status === 401 || error.status === 403){
+          setError('Login, please');
+          return;
+        }
+        if(error.status >= 500){
+          setError('Server error. Please try again later.');
+          return;
+        }
+      });
   }
 
   function createUser(){
@@ -122,8 +149,8 @@ export default function UsersLayout(){
   },[setSearchParams])
 
   const context = useMemo(()=>({
-    sort, isLoading, filter, setFilter, filteredUsers, createUser, setAllSearchParams }),
-    [sort, isLoading, filter, setFilter, filteredUsers, createUser, setAllSearchParams]);
+    sort, isLoading, error, filter, setFilter, filteredUsers, createUser, setAllSearchParams }),
+    [sort, isLoading, error, filter, setFilter, filteredUsers, createUser, setAllSearchParams]);
 
   const contextOut = useMemo(()=>({ 
     updateUser, setUsers , openModalDeleteUser }),

@@ -3,14 +3,17 @@ import Row from './Row.jsx';
 import ArrowIcon from './ArrowIcon.jsx';
 import clsx from "clsx";
 
-export default function Table({users, sort, changeSorting, isLoading}){
+export default function Table({users, sort, error, changeSorting, isLoading}){
   const userList = users.map(user=>{
       return (
         <Row user={user} key={user.id}/>
       );
     })
 
-    if(isLoading) return <div className='loading' role="status">Loading...</div>;
+    if(isLoading){
+      return <div className='loading' role="status">Loading...</div>;
+    }
+    if(error) return <div className='alert' role="alert">{error ?? ''}</div>
 
   return(
     <div className={styles["table-wrap"]}>

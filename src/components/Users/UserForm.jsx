@@ -2,11 +2,11 @@ import styles from './users.module.css'
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
-export default function UserForm({mode, user, userId, saveUser, isSaving, openModalDeleteUser}) {
+export default function UserForm({mode, user, userId, error, saveUser, isSaving, openModalDeleteUser}) {
   const navigate = useNavigate();
 
   function cancel(){
-    navigate(-1);
+    navigate('..');
   }
 
   return(
@@ -90,6 +90,7 @@ export default function UserForm({mode, user, userId, saveUser, isSaving, openMo
               Cancel
           </button>
             </div>
+          <div className='alert' role="alert">{error ?? ''}</div>
           { mode==='update' && <button 
             type='button'
             className={clsx(styles['delete-btn'], 'btn')}
