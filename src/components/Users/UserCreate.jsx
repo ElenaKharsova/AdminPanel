@@ -15,7 +15,6 @@ export default function UserCreate(){
 
   function createUser(event){
     event.preventDefault();
-    setIsSaving(true);
     setError(null);
 
     const formData = new FormData(event.currentTarget);
@@ -27,7 +26,18 @@ export default function UserCreate(){
       password: formData.get('password')?.toString() ?? '',
       is_active: formData.get('isActive') === 'on'
     }
-  
+
+    if(!payload.username || !payload.password) {
+      setError(`Login and password can't be empty`);
+      return;
+    }
+
+    if(payload.password.length < 8 || !(/^(?=.*[A-Z])(?=.*\d).+$/).test(payload.password)) {
+      setError('Password should be 8+ character, \n1 capital, 1 numeric');
+      return;
+    }
+
+    setIsSaving(true);
     postUser(token, payload)
       .then(data=>{
         setUsers(curUsers=>[...curUsers, data]);
@@ -38,7 +48,12 @@ export default function UserCreate(){
         if(error.message === 'NETWORK_ERROR'){
           setError('Network error. Check your internet connection and try again.');
           return;
-        }        
+        }     
+        if(error.status === 400){
+          const errorMessage = `${error.data?.username ?? ''} ${error.data?.password ?? ''}`
+          setError(errorMessage);
+          return;
+        }   
         if(error.status === 401 || error.status === 403){
           setError('Login, please');
           return;

@@ -24,7 +24,7 @@ export default function UserUpdate(){
     .then((data)=>setUser(data))
     .catch(error => {
       if(error.message === 'NETWORK_ERROR'){
-        setError('Network error. Check your internet connection and try again.');
+        setError('Network error. \nCheck your internet connection and try again.');
         return;
       }        
       if(error.status === 401 || error.status === 403){
@@ -40,7 +40,6 @@ export default function UserUpdate(){
     
   function saveUser(event){
     event.preventDefault();
-    setIsSaving(true);
 
     const formData = new FormData(event.currentTarget);
 
@@ -52,6 +51,18 @@ export default function UserUpdate(){
       password: formData.get('password')?.toString() ?? '',
       is_active: formData.get('isActive') === 'on'
     }
+
+    if(!payload.username || !payload.password) {
+      setError(`Login and password can't be empty`);
+      return;
+    }
+
+    if(payload.password.length < 8 || !(/^(?=.*[A-Z])(?=.*\d).+$/).test(payload.password)) {
+      setError('Password should be 8+ character, \n1 capital, 1 numeric');
+      return;
+    }
+
+    setIsSaving(true);
     
     putUser(token, payload)
       .then(data=>{

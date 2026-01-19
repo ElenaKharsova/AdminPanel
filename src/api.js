@@ -24,7 +24,6 @@ async function fetchApi(url, responseData){
     error.data = data;
     throw error;
   }
-  
   return data;
 }
 
@@ -117,6 +116,6 @@ export function postUser(token, user){
       is_active: user.is_active
     })
   }
-
+  
   return fetchApi('https://test-assignment.emphasoft.com/api/v1/users/', data);
 }

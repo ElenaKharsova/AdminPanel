@@ -60,6 +60,7 @@
   border: 1px solid var(--border-color);
   border-radius: 6px;
   height: fit-content;
+  background-color: var(--table-main-color);
 
   @media (max-width: 768px){
     position: fixed;

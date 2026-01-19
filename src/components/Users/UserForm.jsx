@@ -14,6 +14,7 @@ export default function UserForm({mode, user, userId, error, saveUser, isSaving,
       <h3 className={styles['details-header']}>
         {mode==='update' ? 'Edit User' : 'Create User'}
       </h3>
+      <div className='alert' role="alert">{ error ?? '' }</div>
       <form className={styles['details-form']} key={userId} onSubmit={saveUser}>
         <div className={styles['details-form__inputs-wrap']}>
           <label className={styles['details__label']}>
@@ -90,7 +91,6 @@ export default function UserForm({mode, user, userId, error, saveUser, isSaving,
               Cancel
           </button>
             </div>
-          <div className='alert' role="alert">{error ?? ''}</div>
           { mode==='update' && <button 
             type='button'
             className={clsx(styles['delete-btn'], 'btn')}
